@@ -1,0 +1,109 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Tech Challenge API",
+        "description": "Documentação das APIs de autoatendimento da lanchonete.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/clients": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Listar todos os clientes",
+                "description": "Retorna uma lista de todos os clientes cadastrados.",
+                "operationId": "af1f3794367a5e843bf15e3a9033d911",
+                "responses": {
+                    "200": {
+                        "description": "Lista de clientes retornada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "João da Silva"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "joao@gmail.com"
+                                            },
+                                            "cpf": {
+                                                "type": "string",
+                                                "example": "12345678900"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "11999998888"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Cadastrar novo cliente",
+                "description": "Cadastra um novo cliente com nome, email, CPF e telefone.",
+                "operationId": "15981a5da120d8b4ea1b91b05a35622b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "cpf",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "João da Silva"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "joao@gmail.com"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "12345678900"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "11999998888"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cliente cadastrado com sucesso."
+                    },
+                    "422": {
+                        "description": "Erro de validação: CPF já cadastrado ou dados inválidos."
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Clientes",
+            "description": "Clientes"
+        }
+    ]
+}
