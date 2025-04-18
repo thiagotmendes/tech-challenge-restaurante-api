@@ -9,6 +9,7 @@ Este projeto foi criado para resolver os principais problemas operacionais de um
 
 - **Laravel 12**: Framework PHP para desenvolvimento backend.
 - **MySQL**: Sistema gerenciador de banco de dados relacional.
+- **phpMyAdmin**: Interface visual para inspecionar o banco de dados.
 - **Swagger (Laravel OpenAPI)**: Documentação interativa das APIs.
 - **Docker + Docker Compose**: Ambiente padronizado e replicável.
 
@@ -47,6 +48,9 @@ routes/
 
 swagger/
 ├── api-docs.yaml               # Documentação Swagger (Laravel OpenAPI)
+
+docker/
+├── wait-for.sh                 # Script para aguardar o MySQL antes de rodar o Laravel
 
 Dockerfile                       # Dockerfile para build da aplicação
 
@@ -101,14 +105,20 @@ cd seu-repositorio
 cp .env.example .env
 ```
 
-3. Suba os containers com Docker Compose
+3. Dê permissão ao script de espera do banco
+```bash
+chmod +x docker/wait-for.sh
+```
+
+4. Suba os containers com Docker Compose
 ```bash
 docker-compose up --build
 ```
 
-4. Acesse a aplicação:
+5. Acesse a aplicação:
 - Laravel: `http://localhost:8000`
 - Swagger: `http://localhost:8000/api/documentation`
+- phpMyAdmin: `http://localhost:8081` (login: `root` / senha: `root`)
 
 ---
 
@@ -131,3 +141,17 @@ Para resetar completamente o banco (inclusive os dados):
 docker-compose down -v
 ```
 
+---
+
+## ⚙️ Observação sobre o comando de inicialização do container Laravel
+
+No `docker-compose.yml`, o comando padrão:
+```yaml
+command: |
+  sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+```
+foi substituído por:
+```yaml
+command: sh docker/wait-for.sh
+```
+Esse script aguarda o banco MySQL estar pronto antes de rodar as migrations e iniciar o servidor Laravel.

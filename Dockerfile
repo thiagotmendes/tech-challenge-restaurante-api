@@ -1,7 +1,7 @@
 FROM php:8.2-fpm
 
 # Instala extensões e dependências
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y default-mysql-client \
     build-essential \
     libpng-dev \
     libjpeg-dev \
