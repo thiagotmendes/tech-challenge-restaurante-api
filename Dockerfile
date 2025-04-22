@@ -1,7 +1,8 @@
 FROM php:8.2-fpm
 
 # Instala extensões e dependências
-RUN apt-get update && apt-get install -y default-mysql-client \
+RUN apt-get update && apt-get install -y \
+    default-mysql-client \
     build-essential \
     libpng-dev \
     libjpeg-dev \
@@ -13,7 +14,9 @@ RUN apt-get update && apt-get install -y default-mysql-client \
     git \
     curl \
     nano \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

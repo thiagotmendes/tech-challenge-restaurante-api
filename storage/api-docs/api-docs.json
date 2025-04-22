@@ -99,6 +99,175 @@
                 }
             }
         },
+        "/api/orders/step": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Adicionar item ao pedido em andamento",
+                "description": "Adiciona um produto ao pedido atual. Se um token de pedido for enviado via cabeçalho, ele será reutilizado. Caso contrário, um novo pedido será iniciado.",
+                "operationId": "b811135884c052d4ae2121b8186745f4",
+                "parameters": [
+                    {
+                        "name": "X-Order-Token",
+                        "in": "header",
+                        "description": "Token do pedido em andamento. Se não for enviado, será criado um novo token.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "step",
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "step": {
+                                        "type": "string",
+                                        "example": "lanche"
+                                    },
+                                    "product_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item adicionado ao pedido com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        },
+                                        "steps": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "product_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "quantity": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/orders/confirm": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Confirmar pedido",
+                "description": "Finaliza o pedido atual com base no token enviado. Os itens são salvos no banco de dados e o cache temporário é apagado.",
+                "operationId": "645ac9d3d5a163db574e6436dbf6e727",
+                "parameters": [
+                    {
+                        "name": "X-Order-Token",
+                        "in": "header",
+                        "description": "Token do pedido em andamento a ser finalizado.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "client_id": {
+                                        "type": "integer",
+                                        "example": 1,
+                                        "nullable": true
+                                    },
+                                    "origin": {
+                                        "type": "string",
+                                        "example": "totem"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pedido criado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pedido criado com sucesso!"
+                                        },
+                                        "order_id": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 45.9
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado ou expirado."
+                    },
+                    "400": {
+                        "description": "Pedido inválido ou vazio."
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
@@ -638,6 +807,10 @@
         {
             "name": "Clientes",
             "description": "Clientes"
+        },
+        {
+            "name": "Pedidos",
+            "description": "Pedidos"
         },
         {
             "name": "Produtos",

@@ -1,5 +1,5 @@
 <?php
-namespace App\Domain\Client;
+namespace App\Domain\Product;
 class ProductEntity
 {
     /**

@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients');
+            $table->foreignId('client_id')->nullable()->constrained('clients');
             $table->decimal('total', 10, 2);
             $table->enum('status', ['recebido', 'em_preparacao', 'pronto', 'finalizado']);
+            $table->uuid('token')->unique()->nullable();
+            $table->enum('origin', ['totem', 'whatsapp', 'balcao'])->default('totem');
             $table->timestamps();
         });
     }

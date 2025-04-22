@@ -1,7 +1,6 @@
 <?php
 namespace App\Services\Product;
 
-use App\Domain\Client\ProductEntity;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 
 class ListProductsService {

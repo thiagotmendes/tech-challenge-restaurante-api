@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Eloquent;
 
-use App\Domain\Client\ProductEntity;
+use App\Domain\Product\ProductEntity;
 use App\Models\Products;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 

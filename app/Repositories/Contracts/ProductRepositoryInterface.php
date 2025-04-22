@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Contracts;
 
-use App\Domain\Client\ProductEntity;
+use App\Domain\Product\ProductEntity;
 
 interface ProductRepositoryInterface
 {

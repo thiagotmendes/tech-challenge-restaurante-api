@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Product;
 
-use App\Domain\Client\ProductEntity;
+use App\Domain\Product\ProductEntity;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 
 class UpdateProductService
