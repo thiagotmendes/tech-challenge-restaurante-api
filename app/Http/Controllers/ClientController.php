@@ -10,7 +10,7 @@ class ClientController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/clients",
+     *     path="/api/clients",
      *     tags={"Clientes"},
      *     summary="Listar todos os clientes",
      *     description="Retorna uma lista de todos os clientes cadastrados.",
@@ -37,7 +37,7 @@ class ClientController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/clients",
+     *     path="/api/clients",
      *     tags={"Clientes"},
      *     summary="Cadastrar novo cliente",
      *     description="Cadastra um novo cliente com nome, email, CPF e telefone.",

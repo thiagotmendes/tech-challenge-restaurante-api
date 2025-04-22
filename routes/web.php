@@ -2,10 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::redirect('/', '/api/documentation');
 
 Route::get('/documentation', function () {
     return view('l5-swagger::index');

@@ -3,7 +3,6 @@ namespace App\Services\Client;
 
 use App\Domain\Client\ClientEntity;
 use App\Repositories\Contracts\ClientRepositoryInterface;
-use Nette\Schema\ValidationException;
 
 class RegisterClientService
 {

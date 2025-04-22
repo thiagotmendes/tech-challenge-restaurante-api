@@ -10,7 +10,6 @@ namespace App\Http\Controllers;
  *     description="Documentação das APIs de autoatendimento da lanchonete."
  * )
  */
-
 abstract class Controller
 {
     //
