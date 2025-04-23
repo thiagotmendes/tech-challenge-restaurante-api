@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\Client\StoreClientRequest;
 use App\Services\Client\ListClientsService;
 use App\Services\Client\RegisterClientService;
 

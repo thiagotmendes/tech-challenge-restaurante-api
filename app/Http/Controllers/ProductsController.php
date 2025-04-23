@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\Product\StoreProductRequest;
 use App\Services\Product\DeleteProductService;
 use App\Services\Product\FindProductByCategory;
 use App\Services\Product\ListProductsService;

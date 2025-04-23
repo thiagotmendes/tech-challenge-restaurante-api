@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Products;
+use App\Http\Requests\Order\ConfirmOrderRequest;
+use App\Http\Requests\Order\StepOrderRequest;
+use App\Services\Order\ConfirmOrderService;
+use App\Services\Order\SaveOrderStepService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 
 class OrderStepController extends Controller
@@ -47,25 +47,21 @@ class OrderStepController extends Controller
      *     )
      * )
      */
-    public function step(Request $request ): \Illuminate\Http\JsonResponse
+    public function step(StepOrderRequest $request, SaveOrderStepService $service): \Illuminate\Http\JsonResponse
     {
-        $token = $request->header('x-Order-Token') ?? Str::uuid()->toString();
+        $token = $request->header('X-Order-Token') ?? Str::uuid()->toString();
 
         $stepItem = [
-            'product_id' => $request->input('product_id'),
-            'quantity' => $request->input('quantity', 1),
+            'product_id' => $request->product_id,
+            'quantity' => $request->quantity ?? 1,
         ];
 
-        $currentSteps = json_decode(Redis::get("order_draft:$token"), true);
-
-        $currentSteps[] = $stepItem;
-
-        Redis::setex("order_draft:$token", 60 * 60 * 24, json_encode($currentSteps));
+        $steps = $service->handle($token, $stepItem);
 
         return response()->json([
             'success' => true,
             'token' => $token,
-            'steps' => $currentSteps,
+            'steps' => $steps,
         ]);
     }
 
@@ -109,67 +105,25 @@ class OrderStepController extends Controller
      *     )
      * )
      */
-    public function confirm(Request $request): \Illuminate\Http\JsonResponse
+    public function confirm(ConfirmOrderRequest $request, ConfirmOrderService $service): \Illuminate\Http\JsonResponse
     {
         $token = $request->header('X-Order-Token');
+        $clientId = $request->input('client_id');
+        $origin = $request->input('origin', 'totem');
 
-        if (!$token || !Redis::exists("order_draft:$token")) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Pedido não encontrado ou expirado.'
-            ], 404);
-        }
+        $response = $service->handle($token, $clientId, $origin);
 
-        $stepsData = json_decode(Redis::get("order_draft:$token"), true);
-        if (empty($stepsData)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Pedido inválido ou vazio.'
-            ], 400);
-        }
-
-        $total = 0;
-        $clientId = $request->input('client_id'); // Pode ser null
-        $origin = $request->input('origin', 'totem'); // 'totem' como default
-
-        // Cria o pedido
-        $order = Order::create([
-            'client_id' => $clientId,
-            'total' => 0, // atualizado depois
-            'status' => 'recebido',
-            'token' => $token,
-            'origin' => $origin,
-        ]);
-
-        foreach ($stepsData as $item) {
-            $product = Products::find($item['product_id']);
-            if (!$product) {
-                continue;
-            }
-
-            $subtotal = $product->price * $item['quantity'];
-            $total += $subtotal;
-
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'quantity' => $item['quantity'],
-                'price' => $product->price,
-            ]);
-        }
-
-        // Atualiza total
-        $order->update(['total' => $total]);
-
-        // Limpa o rascunho do Redis
-        Redis::del("order_draft:$token");
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Pedido criado com sucesso!',
-            'order_id' => $order->id,
-            'total' => $total
-        ]);
+        return response()->json(
+            $response['status'] === 'success'
+                ? [
+                'success' => true,
+                'message' => $response['message'],
+                'order_id' => $response['order_id'],
+                'total' => $response['total'],
+            ]
+                : ['success' => false, 'message' => $response['message']],
+            $response['code']
+        );
     }
 
 }
