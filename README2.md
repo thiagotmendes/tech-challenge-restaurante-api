@@ -25,81 +25,41 @@ Este projeto foi criado para resolver os principais problemas operacionais de um
 app/
 ├── Domain/                      # Camada de Domínio (Regras de Negócio)
 │   ├── Order/                   # Domínio de Pedidos
-│   │   ├── Entities/           # Entidades do domínio
-│   │   ├── ValueObjects/       # Objetos de valor
-│   │   └── Exceptions/         # Exceções específicas do domínio
 │   ├── Product/                # Domínio de Produtos
-│   │   ├── Entities/
-│   │   ├── ValueObjects/
-│   │   └── Exceptions/
 │   └── Client/                 # Domínio de Clientes
-│       ├── Entities/
-│       ├── ValueObjects/
-│       └── Exceptions/
 │
 ├── Http/                       # Camada de Apresentação
 │   ├── Controllers/           # Controladores da API
-│   │   ├── OrderController.php
-│   │   ├── ProductController.php
-│   │   └── ClientController.php
-│   ├── Requests/              # Validação de dados
-│   │   ├── OrderRequest.php
-│   │   ├── ProductRequest.php
-│   │   └── ClientRequest.php
-│   └── Resources/             # Transformação de dados
-│       ├── OrderResource.php
-│       ├── ProductResource.php
-│       └── ClientResource.php
+│   └── Requests/              # Validação de dados
 │
 ├── Services/                  # Camada de Aplicação
 │   ├── Order/                # Serviços de Pedidos
-│   │   ├── CreateOrderService.php
-│   │   ├── UpdateOrderService.php
-│   │   └── DeleteOrderService.php
 │   ├── Product/              # Serviços de Produtos
-│   │   ├── CreateProductService.php
-│   │   ├── UpdateProductService.php
-│   │   └── DeleteProductService.php
 │   ├── Client/               # Serviços de Clientes
-│   │   ├── CreateClientService.php
-│   │   ├── UpdateClientService.php
-│   │   └── DeleteClientService.php
 │   └── Payment/              # Serviços de Pagamento
-│       ├── MercadoPagoService.php
-│       └── PaymentGatewayInterface.php
 │
 ├── Repositories/             # Camada de Infraestrutura
 │   ├── Contracts/           # Interfaces dos Repositórios
-│   │   ├── OrderRepositoryInterface.php
-│   │   ├── ProductRepositoryInterface.php
-│   │   └── ClientRepositoryInterface.php
-│   └── Eloquent/           # Implementações Eloquent
-│       ├── OrderRepository.php
-│       ├── ProductRepository.php
-│       └── ClientRepository.php
+│   ├── Eloquent/           # Implementações Eloquent
+│   └── Redis/              # Implementações Redis
 │
 ├── Models/                  # Modelos Eloquent
 │   ├── Order.php
-│   ├── Product.php
-│   └── Client.php
+│   ├── OrderItem.php
+│   ├── Products.php
+│   ├── Client.php
+│   └── User.php
 │
 ├── Events/                 # Eventos do Sistema
-│   ├── OrderCreated.php
-│   ├── OrderUpdated.php
-│   └── OrderDeleted.php
+│   ├── OrderReady.php
+│   └── OrderConfirmed.php
 │
-├── Providers/             # Service Providers
-│   ├── AppServiceProvider.php
-│   ├── RepositoryServiceProvider.php
-│   └── EventServiceProvider.php
-│
-└── Exceptions/           # Exceções Globais
-    ├── Handler.php
-    └── CustomExceptions/
+└── Providers/             # Service Providers
+    ├── AppServiceProvider.php
+    └── TelescopeServiceProvider.php
 
 routes/
-├── api.php              # Rotas da API
-└── channels.php         # Rotas de Broadcasting
+└── api.php              # Rotas da API
 
 config/
 ├── app.php             # Configurações da aplicação
@@ -116,13 +76,8 @@ tests/
 ├── Feature/           # Testes de integração
 └── TestCase.php       # Classe base para testes
 
-swagger/
-└── api-docs.yaml      # Documentação Swagger
-
 docker/
-├── wait-for.sh        # Script de espera do MySQL
-└── nginx/            # Configurações do Nginx
-    └── default.conf
+└── wait-for.sh        # Script de espera do MySQL
 
 Dockerfile             # Build da aplicação
 docker-compose.yml     # Composição dos containers
