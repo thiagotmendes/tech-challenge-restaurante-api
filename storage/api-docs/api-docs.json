@@ -99,6 +99,172 @@
                 }
             }
         },
+        "/api/kitchen/orders": {
+            "get": {
+                "tags": [
+                    "Cozinha"
+                ],
+                "summary": "Listar pedidos da cozinha com filtro opcional de status",
+                "operationId": "d96213166a5cbb999de0654ccf6de5ed",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status do pedido",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "recebido",
+                                "em_preparacao",
+                                "pronto",
+                                "finalizado"
+                            ],
+                            "example": "em_preparacao"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de pedidos filtrados ou pendentes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "client_id": {
+                                                "type": "integer",
+                                                "example": null,
+                                                "nullable": true
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "em_preparacao"
+                                            },
+                                            "total": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 42.5
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "example": "2025-04-23 16:40:00"
+                                            },
+                                            "items": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "product_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "quantity": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "price": {
+                                                            "type": "number",
+                                                            "example": 15
+                                                        },
+                                                        "product": {
+                                                            "properties": {
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Hambúrguer X"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kitchen/orders/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Cozinha"
+                ],
+                "summary": "Atualiza o status de um pedido",
+                "operationId": "0f3dffbf2a877d2a9c95f0a2a1c7e871",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do pedido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "recebido",
+                                            "em_preparacao",
+                                            "pronto",
+                                            "finalizado"
+                                        ],
+                                        "example": "em_preparacao"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Status atualizado para 'em_preparacao'"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado"
+                    }
+                }
+            }
+        },
         "/api/orders/step": {
             "post": {
                 "tags": [
@@ -807,6 +973,10 @@
         {
             "name": "Clientes",
             "description": "Clientes"
+        },
+        {
+            "name": "Cozinha",
+            "description": "Cozinha"
         },
         {
             "name": "Pedidos",

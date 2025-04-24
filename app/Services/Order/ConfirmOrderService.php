@@ -3,6 +3,7 @@ namespace App\Services\Order;
 
 use App\Services\Payment\MercadoPagoService;
 use MercadoPago\Exceptions\MPApiException;
+use App\Events\OrderConfirmed;
 
 class ConfirmOrderService
 {
@@ -29,10 +30,13 @@ class ConfirmOrderService
 
         $entity = $this->factory->build($clientId, $origin, $stepsData);
 
+        /** uncomment this line to back work on mercado pago */
 //        $paymentUrl = $this->mercadoPagoService->criarPagamento( $entity->getItems() );
 
         $order = $this->creator->persist($entity, $token);
         $this->draft->clear($token);
+
+        event(new OrderConfirmed($order->id, $order->total));
 
         return [
             'status' => 'success',
