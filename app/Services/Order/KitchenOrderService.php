@@ -27,6 +27,12 @@ class KitchenOrderService
     public function updateStatus(int $orderId, string $status): void
     {
         $order = Order::findOrFail($orderId);
+
+        if ($status === 'em_preparacao') {
+            $order->preparation_started_at = now();
+            $order->estimated_ready_at = now()->addMinutes(15);
+        }
+
         $order->status = $status;
         $order->save();
 

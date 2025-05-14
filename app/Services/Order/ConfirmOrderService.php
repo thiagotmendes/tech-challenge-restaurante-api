@@ -17,7 +17,7 @@ class ConfirmOrderService
     /**
      * @throws MPApiException
      */
-    public function handle(string $token, ?int $clientId = null, string $origin = 'totem'): array
+    public function handle(string $token, ?int $clientId = null, string $origin = 'totem', string $pickupMethod): array
     {
         if (!$this->draft->exists($token)) {
             return ['status' => 'error', 'code' => 404, 'message' => 'Pedido não encontrado ou expirado.'];
@@ -28,7 +28,7 @@ class ConfirmOrderService
             return ['status' => 'error', 'code' => 400, 'message' => 'Pedido inválido ou vazio.'];
         }
 
-        $entity = $this->factory->build($clientId, $origin, $stepsData);
+        $entity = $this->factory->build($clientId, $origin, $stepsData, $pickupMethod);
 
         /** uncomment this line to back work on mercado pago */
 //        $paymentUrl = $this->mercadoPagoService->criarPagamento( $entity->getItems() );

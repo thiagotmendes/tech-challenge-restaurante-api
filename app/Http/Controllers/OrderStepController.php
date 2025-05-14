@@ -82,7 +82,8 @@ class OrderStepController extends Controller
      *         required=false,
      *         @OA\JsonContent(
      *             @OA\Property(property="client_id", type="integer", nullable=true, example=1),
-     *             @OA\Property(property="origin", type="string", example="totem")
+     *             @OA\Property(property="origin", type="string", example="totem"),
+     *             @OA\Property(property="pickup_method", type="string", example="delivery")
      *         )
      *     ),
      *     @OA\Response(
@@ -110,8 +111,9 @@ class OrderStepController extends Controller
         $token = $request->header('X-Order-Token');
         $clientId = $request->input('client_id');
         $origin = $request->input('origin', 'totem');
+        $pickupMethod = $request->input('pickup_method');
 
-        $response = $service->handle($token, $clientId, $origin);
+        $response = $service->handle($token, $clientId, $origin, $pickupMethod);
 
         return response()->json(
             $response['status'] === 'success'
@@ -120,6 +122,7 @@ class OrderStepController extends Controller
                 'message' => $response['message'],
                 'order_id' => $response['order_id'],
                 'total' => $response['total'],
+                'token' => $token
             ]
                 : ['success' => false, 'message' => $response['message']],
             $response['code']

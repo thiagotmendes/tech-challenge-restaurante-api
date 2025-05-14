@@ -11,6 +11,8 @@ class Order extends Model
         'client_id',
         'total',
         'status',
+        'token',
+        'pickup_method'
     ];
 
     protected $table = 'orders';

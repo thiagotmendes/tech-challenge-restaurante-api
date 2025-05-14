@@ -15,6 +15,7 @@ class ConfirmOrderRequest extends FormRequest
         return [
             'client_id' => 'nullable|exists:clients,id',
             'origin' => 'nullable|in:totem,whatsapp,balcao',
+            'pickup_method' => 'required|in:local,delivery'
         ];
     }
 }

@@ -36,3 +36,5 @@ Route::prefix('kitchen')->group(function () {
     Route::get('orders', [KitchenOrderController::class, 'index']);
     Route::patch('orders/{id}/status', [KitchenOrderController::class, 'updateStatus']);
 });
+
+Route::get('/orders/{token}/track', [\App\Http\Controllers\OrderTrackingController::class, 'track']);

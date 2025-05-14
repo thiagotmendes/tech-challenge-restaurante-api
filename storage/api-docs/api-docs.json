@@ -388,6 +388,10 @@
                                     "origin": {
                                         "type": "string",
                                         "example": "totem"
+                                    },
+                                    "pickup_method": {
+                                        "type": "string",
+                                        "example": "delivery"
                                     }
                                 },
                                 "type": "object"
@@ -430,6 +434,96 @@
                     },
                     "400": {
                         "description": "Pedido inválido ou vazio."
+                    }
+                }
+            }
+        },
+        "/api/orders/track/{token}": {
+            "get": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Acompanhar status do pedido",
+                "description": "Retorna o status atual do pedido, incluindo tempo estimado de preparo e itens.",
+                "operationId": "37dab72a531b7c145239a8e3cecc2ff7",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "Token do pedido a ser acompanhado",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Status do pedido retornado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "em_preparacao"
+                                        },
+                                        "preparation_started_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-05-06T17:30:00Z"
+                                        },
+                                        "estimated_ready_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-05-06T17:45:00Z"
+                                        },
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "product": {
+                                                        "type": "string",
+                                                        "example": "X-Burger"
+                                                    },
+                                                    "quantity": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pedido não encontrado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
