@@ -10,17 +10,19 @@ class RegisterClientService
         protected ClientRepositoryInterface $repository
     ) {}
 
-    public function handle(array $data): void
+    public function handle(array $data): ClientEntity
     {
+        // Verifica se já existe um cliente com o CPF informado
         $existing = $this->repository->findByCpf($data['cpf']);
 
         if ($existing) {
-            abort(response()->json([
-                'message' => 'CPF já cadastrado.'
-            ], 422));
+            return $existing; // Cliente já cadastrado, retorna
         }
 
+        // Caso não exista, cria um novo cliente
         $client = new ClientEntity($data['name'], $data['email'], $data['cpf'], $data['phone']);
         $this->repository->save($client);
+
+        return $client;
     }
 }

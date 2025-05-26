@@ -21,7 +21,7 @@ services:
     db:
         image: mysql:8.0
         container_name: laravel_db
-        restart: always
+        restart: no
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: laravel
@@ -33,7 +33,7 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: laravel_phpmyadmin
-        restart: always
+        restart: unless-stopped
         ports:
             - 8081:80
         environment:
@@ -41,13 +41,14 @@ services:
             MYSQL_ROOT_PASSWORD: root
         depends_on:
             - db
+        platform: linux/amd64
 
     redis:
         image: redis:alpine
         container_name: laravel_redis
         ports:
             - 6379:6379
-        restart: always
+        restart: no
 
 volumes:
     dbdata:

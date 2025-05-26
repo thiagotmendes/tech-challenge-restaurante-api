@@ -63,9 +63,13 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request, RegisterClientService $service)
     {
-        $service->handle($request->validated());
+        $client = $service->handle($request->validated());
 
-        return response()->json(['message' => 'Cliente cadastrado com sucesso.'], 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Cliente registrado ou já existente.',
+            'client' => $client
+        ], 200);
     }
 
 }
