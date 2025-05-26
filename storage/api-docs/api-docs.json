@@ -52,8 +52,8 @@
                 "tags": [
                     "Clientes"
                 ],
-                "summary": "Cadastrar novo cliente",
-                "description": "Cadastra um novo cliente com nome, email, CPF e telefone.",
+                "summary": "Cadastrar cliente ou retornar cliente existente",
+                "description": "Cria um novo cliente com os dados informados ou retorna o cliente já existente com o mesmo CPF.",
                 "operationId": "f1e86e5b79fedfa6593067977292b13b",
                 "requestBody": {
                     "required": true,
@@ -73,7 +73,8 @@
                                     },
                                     "email": {
                                         "type": "string",
-                                        "example": "joao@gmail.com"
+                                        "format": "email",
+                                        "example": "joao@example.com"
                                     },
                                     "cpf": {
                                         "type": "string",
@@ -81,7 +82,7 @@
                                     },
                                     "phone": {
                                         "type": "string",
-                                        "example": "11999998888"
+                                        "example": "11999999999"
                                     }
                                 },
                                 "type": "object"
@@ -90,11 +91,49 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Cliente cadastrado com sucesso."
+                    "200": {
+                        "description": "Cliente registrado ou já existente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente registrado ou já existente."
+                                        },
+                                        "client": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "João da Silva"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "joao@example.com"
+                                                },
+                                                "cpf": {
+                                                    "type": "string",
+                                                    "example": "12345678900"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "11999999999"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Erro de validação: CPF já cadastrado ou dados inválidos."
+                        "description": "Erro de validação nos dados fornecidos"
                     }
                 }
             }

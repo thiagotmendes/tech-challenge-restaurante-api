@@ -39,28 +39,41 @@ class ClientController extends Controller
      * @OA\Post(
      *     path="/api/clients",
      *     tags={"Clientes"},
-     *     summary="Cadastrar novo cliente",
-     *     description="Cadastra um novo cliente com nome, email, CPF e telefone.",
+     *     summary="Cadastrar cliente ou retornar cliente existente",
+     *     description="Cria um novo cliente com os dados informados ou retorna o cliente já existente com o mesmo CPF.",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"name","email","cpf","phone"},
+     *             required={"name", "email", "cpf", "phone"},
      *             @OA\Property(property="name", type="string", example="João da Silva"),
-     *             @OA\Property(property="email", type="string", example="joao@gmail.com"),
+     *             @OA\Property(property="email", type="string", format="email", example="joao@example.com"),
      *             @OA\Property(property="cpf", type="string", example="12345678900"),
-     *             @OA\Property(property="phone", type="string", example="11999998888")
+     *             @OA\Property(property="phone", type="string", example="11999999999")
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
-     *         description="Cliente cadastrado com sucesso."
+     *         response=200,
+     *         description="Cliente registrado ou já existente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Cliente registrado ou já existente."),
+     *             @OA\Property(
+     *                 property="client",
+     *                 type="object",
+     *                 @OA\Property(property="name", type="string", example="João da Silva"),
+     *                 @OA\Property(property="email", type="string", example="joao@example.com"),
+     *                 @OA\Property(property="cpf", type="string", example="12345678900"),
+     *                 @OA\Property(property="phone", type="string", example="11999999999")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Erro de validação: CPF já cadastrado ou dados inválidos."
+     *         description="Erro de validação nos dados fornecidos"
      *     )
      * )
      */
+
     public function store(StoreClientRequest $request, RegisterClientService $service)
     {
         $client = $service->handle($request->validated());
