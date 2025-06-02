@@ -33,7 +33,7 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: laravel_phpmyadmin
-        restart: unless-stopped
+        restart: no
         ports:
             - 8081:80
         environment:

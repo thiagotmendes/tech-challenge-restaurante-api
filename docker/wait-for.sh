@@ -12,4 +12,5 @@ echo "✅ Banco de dados está pronto!"
 
 # Executa as migrations e inicia o servidor
 php artisan migrate --force
+php artisan db:seed --force
 php artisan serve --host=0.0.0.0 --port=8000
