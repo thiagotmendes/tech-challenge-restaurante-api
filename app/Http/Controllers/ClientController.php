@@ -21,6 +21,7 @@ class ClientController extends Controller
      *             type="array",
      *             @OA\Items(
      *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="name", type="string", example="João da Silva"),
      *                 @OA\Property(property="email", type="string", example="joao@gmail.com"),
      *                 @OA\Property(property="cpf", type="string", example="12345678900"),
@@ -40,7 +41,7 @@ class ClientController extends Controller
      *     path="/api/clients",
      *     tags={"Clientes"},
      *     summary="Cadastrar cliente ou retornar cliente existente",
-     *     description="Cria um novo cliente com os dados informados ou retorna o cliente já existente com o mesmo CPF.",
+     *     description="Cria um novo cliente com os dados informados ou retorna o cliente já existente com o mesmo CPF. O ID do cliente retornado pode ser usado posteriormente para vincular pedidos.",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -60,6 +61,7 @@ class ClientController extends Controller
      *             @OA\Property(
      *                 property="client",
      *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="name", type="string", example="João da Silva"),
      *                 @OA\Property(property="email", type="string", example="joao@example.com"),
      *                 @OA\Property(property="cpf", type="string", example="12345678900"),
@@ -81,7 +83,13 @@ class ClientController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Cliente registrado ou já existente.',
-            'client' => $client
+            'client' => [
+                'id' => $client->id,
+                'name' => $client->name,
+                'email' => $client->email,
+                'cpf' => $client->cpf,
+                'phone' => $client->phone
+            ]
         ], 200);
     }
 

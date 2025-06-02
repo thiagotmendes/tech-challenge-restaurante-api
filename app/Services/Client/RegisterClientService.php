@@ -16,13 +16,11 @@ class RegisterClientService
         $existing = $this->repository->findByCpf($data['cpf']);
 
         if ($existing) {
-            return $existing; // Cliente já cadastrado, retorna
+            return $existing;
         }
 
         // Caso não exista, cria um novo cliente
         $client = new ClientEntity($data['name'], $data['email'], $data['cpf'], $data['phone']);
-        $this->repository->save($client);
-
-        return $client;
+        return $this->repository->save($client);
     }
 }

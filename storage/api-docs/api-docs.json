@@ -23,6 +23,10 @@
                                     "type": "array",
                                     "items": {
                                         "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
                                             "name": {
                                                 "type": "string",
                                                 "example": "João da Silva"
@@ -53,7 +57,7 @@
                     "Clientes"
                 ],
                 "summary": "Cadastrar cliente ou retornar cliente existente",
-                "description": "Cria um novo cliente com os dados informados ou retorna o cliente já existente com o mesmo CPF.",
+                "description": "Cria um novo cliente com os dados informados ou retorna o cliente já existente com o mesmo CPF. O ID do cliente retornado pode ser usado posteriormente para vincular pedidos.",
                 "operationId": "f1e86e5b79fedfa6593067977292b13b",
                 "requestBody": {
                     "required": true,
@@ -107,6 +111,10 @@
                                         },
                                         "client": {
                                             "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
                                                 "name": {
                                                     "type": "string",
                                                     "example": "João da Silva"
@@ -399,7 +407,7 @@
                     "Pedidos"
                 ],
                 "summary": "Confirmar pedido",
-                "description": "Finaliza o pedido atual com base no token enviado. Os itens são salvos no banco de dados e o cache temporário é apagado.",
+                "description": "Finaliza o pedido atual com base no token enviado. Os itens são salvos no banco de dados e o cache temporário é apagado. O client_id é opcional e pode ser usado para vincular o pedido a um cliente cadastrado. Se não for fornecido, o pedido será registrado sem vínculo com cliente.",
                 "operationId": "645ac9d3d5a163db574e6436dbf6e727",
                 "parameters": [
                     {
@@ -414,22 +422,39 @@
                     }
                 ],
                 "requestBody": {
-                    "required": false,
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "pickup_method"
+                                ],
                                 "properties": {
                                     "client_id": {
+                                        "description": "ID do cliente obtido no cadastro/consulta de clientes. Opcional.",
                                         "type": "integer",
                                         "example": 1,
                                         "nullable": true
                                     },
                                     "origin": {
+                                        "description": "Origem do pedido",
                                         "type": "string",
+                                        "default": "totem",
+                                        "enum": [
+                                            "totem",
+                                            "whatsapp",
+                                            "balcao"
+                                        ],
                                         "example": "totem"
                                     },
                                     "pickup_method": {
+                                        "description": "Método de retirada do pedido",
                                         "type": "string",
+                                        "enum": [
+                                            "balcao",
+                                            "delivery",
+                                            "mesa"
+                                        ],
                                         "example": "delivery"
                                     }
                                 },
@@ -461,6 +486,11 @@
                                             "type": "number",
                                             "format": "float",
                                             "example": 45.9
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "format": "uuid",
+                                            "example": "550e8400-e29b-41d4-a716-446655440000"
                                         }
                                     },
                                     "type": "object"

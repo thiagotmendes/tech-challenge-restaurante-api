@@ -70,7 +70,7 @@ class OrderStepController extends Controller
      *     path="/api/orders/confirm",
      *     tags={"Pedidos"},
      *     summary="Confirmar pedido",
-     *     description="Finaliza o pedido atual com base no token enviado. Os itens são salvos no banco de dados e o cache temporário é apagado.",
+     *     description="Finaliza o pedido atual com base no token enviado. Os itens são salvos no banco de dados e o cache temporário é apagado. O client_id é opcional e pode ser usado para vincular o pedido a um cliente cadastrado. Se não for fornecido, o pedido será registrado sem vínculo com cliente.",
      *     @OA\Parameter(
      *         name="X-Order-Token",
      *         in="header",
@@ -79,11 +79,31 @@ class OrderStepController extends Controller
      *         @OA\Schema(type="string", format="uuid")
      *     ),
      *     @OA\RequestBody(
-     *         required=false,
+     *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="client_id", type="integer", nullable=true, example=1),
-     *             @OA\Property(property="origin", type="string", example="totem"),
-     *             @OA\Property(property="pickup_method", type="string", example="delivery")
+     *             required={"pickup_method"},
+     *             @OA\Property(
+     *                 property="client_id",
+     *                 type="integer",
+     *                 nullable=true,
+     *                 description="ID do cliente obtido no cadastro/consulta de clientes. Opcional.",
+     *                 example=1
+     *             ),
+     *             @OA\Property(
+     *                 property="origin",
+     *                 type="string",
+     *                 enum={"totem", "whatsapp", "balcao"},
+     *                 default="totem",
+     *                 description="Origem do pedido",
+     *                 example="totem"
+     *             ),
+     *             @OA\Property(
+     *                 property="pickup_method",
+     *                 type="string",
+     *                 enum={"balcao", "delivery", "mesa"},
+     *                 description="Método de retirada do pedido",
+     *                 example="delivery"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -93,7 +113,8 @@ class OrderStepController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Pedido criado com sucesso!"),
      *             @OA\Property(property="order_id", type="integer", example=10),
-     *             @OA\Property(property="total", type="number", format="float", example=45.90)
+     *             @OA\Property(property="total", type="number", format="float", example=45.90),
+     *             @OA\Property(property="token", type="string", format="uuid", example="550e8400-e29b-41d4-a716-446655440000")
      *         )
      *     ),
      *     @OA\Response(
