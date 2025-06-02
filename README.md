@@ -1,7 +1,18 @@
-# 🍔 Tech Challenge - Sistema de Autoatendimento para Lanchonete
+# Tech Challenge - Sistema de Autoatendimento para Lanchonete
+
+Tech challenge FIAP Arquitetura de Software
 
 ## 🮩 Visão Geral
 Este projeto foi criado para resolver os principais problemas operacionais de uma lanchonete em expansão, oferecendo um sistema backend robusto para controle de pedidos e administração via autoatendimento. O sistema é construído com foco em uma arquitetura limpa e desacoplada, seguindo os princípios da **Arquitetura Hexagonal**.
+
+---
+
+### Grupo 49
+![Logo do 49Burguer](./logo_49ers.jpg)
+> RM363873 - Danilo Alves Ganda <br/>
+> RM362245 - Fernando Nistal <br/>
+> RM364485 - Ricardo Cezar Dias <br/>
+> RM362014 - Thiago Mendes <br/>
 
 ---
 
