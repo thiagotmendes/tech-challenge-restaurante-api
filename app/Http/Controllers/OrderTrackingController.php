@@ -10,7 +10,7 @@ class OrderTrackingController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/orders/track/{token}",
+     *     path="/api/orders/{token}/track",
      *     tags={"Pedidos"},
      *     summary="Acompanhar status do pedido",
      *     description="Retorna o status atual do pedido, incluindo tempo estimado de preparo e itens.",

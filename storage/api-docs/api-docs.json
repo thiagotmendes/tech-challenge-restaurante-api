@@ -507,14 +507,14 @@
                 }
             }
         },
-        "/api/orders/track/{token}": {
+        "/api/orders/{token}/track": {
             "get": {
                 "tags": [
                     "Pedidos"
                 ],
                 "summary": "Acompanhar status do pedido",
                 "description": "Retorna o status atual do pedido, incluindo tempo estimado de preparo e itens.",
-                "operationId": "37dab72a531b7c145239a8e3cecc2ff7",
+                "operationId": "8e94d10d07a13f304fb4fb1ebf507c96",
                 "parameters": [
                     {
                         "name": "token",
